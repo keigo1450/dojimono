@@ -13,6 +13,10 @@ function get_paper()    { return get_parameter("paper"     ); }
 function get_plant()    { return get_parameter("plant"     ); }
 function get_wood()     { return get_parameter("wood"      ); }
 
+function get_skill_forestry()  { return get_parameter("forestry_skill"    ); }
+function get_skill_papermake() { return get_parameter("papermaking_skill" ); }
+function get_experience()      { return get_parameter("experience"        ); }
+
 function publish(){
   money = get_money();
   paper = get_paper();
@@ -37,29 +41,41 @@ function publish_enable() {
 function forestry(){
   plant = get_plant();
   wood  = get_wood();
+  skill_forestry = get_skill_forestry();
   if ( plant <= 0 ) {
     alert("Buy plant!");
   }else{
     change_parameter( "plant", plant - 1 );
     change_parameter( "wood" , wood  + 5 );
+    change_parameter( "forestry_skill", skill_forestry + 10 );
   }
 }
 
 function papermake(){
   wood  = get_wood();
   paper = get_paper();
+  papermake_skill = get_skill_papermake();
   if ( wood <= 0 ){
     alert("Do forestry!");
   }else{
     change_parameter( "wood" , wood  - 1  );
     change_parameter( "paper", paper + 30 );
+    change_parameter( "papermaking_skill", papermaking_skill + 10 );
   }
 }
 
 function go_on_event(){}
 
 function sell_books(){
-  alert( Math.round( Math.random() * 15 ) );
+  stock = get_stock();
+  sales = Math.round( Math.random() * 15 );
+  if ( sales <= stock ) {
+    change_parameter( "money", money + ( sales * 300 ) );
+    change_parameter( "stock", stock -   sales         );
+  }else{
+    change_parameter( "money", money + ( stock * 300 ) );
+    change_parameter( "stock", 0                       );
+  }
 }
 
 function add_villager(){
